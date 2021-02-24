@@ -65,6 +65,8 @@ function getControlledToken() {
 }
 
 function handleKeys(event, key, up) {
+	if (event.repeat)
+		return
 	if (event.code.toLowerCase() === game.settings.get("rangefinder", "activationKey").toLowerCase()) {
 		const ruler = canvas.controls.ruler
 		if (up) {
