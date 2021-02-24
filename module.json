@@ -1,0 +1,32 @@
+{
+	"name": "rangefinder",
+	"title": "Rangefinder",
+	"description": "Quckly find out how far something is away form you. Pressing Alt Gr (this key can be changed) will show a ruler between your token and the area you're hovering.",
+	"version": "1.0.0",
+	"minimumCoreVersion" : "0.7.9",
+	"compatibleCoreVersion" : "0.7.9",
+	"authors": [
+		{
+			"name": "Manuel Vögele",
+			"email": "develop@manuel-voegele.de",
+			"discord": "Stäbchenfisch#5107"
+		}
+	],
+	"esmodules": [
+		"src/main.js"
+	],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "lang/en.json"
+		}
+	],
+	"url": "https://github.com/manuelVo/foundryvtt-rangefinder",
+	"download": "https://github.com/manuelVo/foundryvtt-rangefinder/archive/v1.0.0.zip",
+	"manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-rangefinder/master/module.json",
+	"readme": "https://github.com/manuelVo/foundryvtt-rangefinder/blob/master/README.md",
+	"changelog": "https://github.com/manuelVo/foundryvtt-rangefinder/blob/master/CHANGELOG.md",
+	"bugs": "https://github.com/manuelVo/foundryvtt-rangefinder/issues",
+	"allowBugReporter": true
+}

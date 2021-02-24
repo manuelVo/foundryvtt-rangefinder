@@ -1,0 +1,8 @@
+{
+	"rangefinder": {
+		"activationKey": {
+			"name": "Activation Key",
+			"hint": "Rangefinder will activate when this key is pressed and deactivate when the key is released. If you're unsure what to enter here go to https://keycode.info, type the key you want to assign and enter the text listed under `event.code` in this box."
+		}
+	}
+}
