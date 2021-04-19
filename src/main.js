@@ -77,6 +77,10 @@ function handleKeys(event, key, up) {
 			}
 		}
 		else {
+			// If the current ruler is a rangefinder don't refresh it
+			// This can happen because the browser may fire another event that doesn't have event.repeat set after a click on the canvas
+			if (ruler.isRangefinder)
+				return;
 			const token = getControlledToken()
 			if (!token)
 				return
