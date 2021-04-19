@@ -1,4 +1,4 @@
-## In development
+## 1.0.2
 ### Bugfixes
 - Placing waypoints when rangefinder is active now works as intended (using left click).
 
