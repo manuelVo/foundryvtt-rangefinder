@@ -1,3 +1,8 @@
+## 1.0.4
+### Compatibility
+- Verified compatibility with 0.8.8
+
+
 ## 1.0.3
 ### Compatibility
 - Verified compatibility with 0.8.2
