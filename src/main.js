@@ -1,3 +1,5 @@
+import {libWrapper} from "./libwrapper_shim.js";
+
 Hooks.once("init", () => {
 	registerSettings()
 	hookFunctions()
@@ -16,37 +18,10 @@ function registerSettings() {
 }
 
 function hookFunctions() {
-	const originalHandleKeys = KeyboardManager.prototype._handleKeys
-	KeyboardManager.prototype._handleKeys = function (event, key, up) {
-		handleKeys.call(this, event, key, up)
-		return originalHandleKeys.call(this, event, key, up)
-	}
-
-	const originalOnClickRight = Ruler.prototype._onClickRight
-	Ruler.prototype._onClickRight = function (event) {
-		if (!this.isRangefinder) {
-			originalOnClickRight.call(this, event)
-		}
-		// Don't allow to remove the last waypoint from a rangefinder
-		else if ((this._state === 2) && (this.waypoints.length > 1)) {
-			this._removeWaypoint(event.data.origin, {snap: !event.data.originalEvent.shiftKey})
-		}
-	}
-
-	const originalOnClickLeft = Canvas.prototype._onClickLeft
-	Canvas.prototype._onClickLeft = function (event) {
-		const ruler = this.controls.ruler
-		if (ruler.isRangefinder)
-			ruler._addWaypoint(event.data.origin)
-		else
-			originalOnClickLeft.call(this, event)
-	}
-
-	const originalOnMouseUp = Ruler.prototype._onMouseUp
-	Ruler.prototype._onMouseUp = function(event) {
-		if (!this.isRangefinder)
-			originalOnMouseUp.call(this, event)
-	}
+	libWrapper.register("rangefinder", "KeyboardManager.prototype._handleKeys", handleKeys, "WRAPPER");
+	libWrapper.register("rangefinder", "Ruler.prototype._onClickRight", onClickRight, "MIXED");
+	libWrapper.register("rangefinder", "Canvas.prototype._onClickLeft", onClickLeft, "MIXED");
+	libWrapper.register("rangefinder", "Ruler.prototype._onMouseUp", onMouseUp, "MIXED");
 }
 
 function getControlledToken() {
@@ -64,10 +39,8 @@ function getControlledToken() {
 	}
 }
 
-function handleKeys(event, key, up) {
-	if (event.repeat)
-		return
-	if (event.code.toLowerCase() === game.settings.get("rangefinder", "activationKey").toLowerCase()) {
+function handleKeys(wrapped, event, key, up) {
+	if (!event.repeat && event.code.toLowerCase() === game.settings.get("rangefinder", "activationKey").toLowerCase()) {
 		const ruler = canvas.controls.ruler
 		if (up) {
 			if (ruler.isRangefinder) {
@@ -93,6 +66,30 @@ function handleKeys(event, key, up) {
 			game.user.broadcastActivity({ruler})
 		}
 	}
+	return wrapped(event, key, up);
+}
+
+function onClickRight(wrapped, event) {
+	if (!this.isRangefinder) {
+		wrapped(event);
+	}
+	// Don't allow to remove the last waypoint from a rangefinder
+	else if ((this._state === 2) && (this.waypoints.length > 1)) {
+		this._removeWaypoint(event.data.origin, {snap: !event.data.originalEvent.shiftKey})
+	}
+}
+
+function onClickLeft(wrapped, event) {
+	const ruler = this.controls.ruler;
+	if (ruler.isRangefinder)
+		ruler._addWaypoint(event.data.origin);
+	else
+		wrapped(event);
+}
+
+function onMouseUp(wrapped, event) {
+	if (!this.isRangefinder)
+		wrapped(event);
 }
 
 function onMouseMove(event) {
