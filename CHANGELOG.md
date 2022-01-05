@@ -1,3 +1,13 @@
+## 1.1.0
+### Keybindings
+**BREAKING**
+- Rangefinder's hotkey can now be configured via Foundries keybinding configuration menu. As a result of this move your configured hotkey preference is lost. Please reconfigure your preferred keybinding.
+- The default key to activate rangefinder is now the left ctrl key (previously was the right alt key)
+
+### Compatibility
+- Rangefinder is now compatible with Foundry 9
+- Rangefinder now utilizes libwrapper
+
 ## 1.0.4
 ### Compatibility
 - Verified compatibility with 0.8.8
