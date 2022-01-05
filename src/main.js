@@ -1,24 +1,23 @@
 import {libWrapper} from "./libwrapper_shim.js";
 
 Hooks.once("init", () => {
-	registerSettings()
+	registerKeybindings();
 	hookFunctions()
 	window.addEventListener("mousemove", onMouseMove)
 })
 
-function registerSettings() {
-	game.settings.register("rangefinder", "activationKey", {
-		name: "rangefinder.activationKey.name",
-		hint: "rangefinder.activationKey.hint",
-		scope: "client",
-		config: true,
-		type: String,
-		default: "AltRight",
-	})
+function registerKeybindings() {
+	game.keybindings.register("rangefinder", "activate", {
+		name: "rangefinder.activate.name",
+		hint: "rangefinder.activate.hint",
+		onDown: activate,
+		onUp: deactivate,
+		editable: [{key: "ControlLeft"}],
+		precedence: -1,
+	});
 }
 
 function hookFunctions() {
-	libWrapper.register("rangefinder", "KeyboardManager.prototype._handleKeys", handleKeys, "WRAPPER");
 	libWrapper.register("rangefinder", "Ruler.prototype._onClickRight", onClickRight, "MIXED");
 	libWrapper.register("rangefinder", "Canvas.prototype._onClickLeft", onClickLeft, "MIXED");
 	libWrapper.register("rangefinder", "Ruler.prototype._onMouseUp", onMouseUp, "MIXED");
@@ -39,34 +38,33 @@ function getControlledToken() {
 	}
 }
 
-function handleKeys(wrapped, event, key, up) {
-	if (!event.repeat && event.code.toLowerCase() === game.settings.get("rangefinder", "activationKey").toLowerCase()) {
-		const ruler = canvas.controls.ruler
-		if (up) {
-			if (ruler.isRangefinder) {
-				ruler.isRangefinder = false
-				if (ruler._state !== Ruler.STATES.MOVING)
-					ruler._endMeasurement()
-			}
-		}
-		else {
-			// If the current ruler is a rangefinder don't refresh it
-			// This can happen because the browser may fire another event that doesn't have event.repeat set after a click on the canvas
-			if (ruler.isRangefinder)
-				return;
-			const token = getControlledToken()
-			if (!token)
-				return
-			ruler.clear()
-			ruler.isRangefinder = true
-			ruler.rangefinderToken = token
-			const tokenCenter = {x: token.x + token.w / 2, y: token.y + token.h / 2}
-			ruler._addWaypoint(tokenCenter)
-			measure(event)
-			game.user.broadcastActivity({ruler})
-		}
+function activate(event) {
+	const ruler = canvas.controls.ruler;
+	// If the current ruler is a rangefinder don't refresh it
+	// This can happen because the browser may fire another event that doesn't have event.repeat set after a click on the canvas
+	if (ruler.isRangefinder)
+		return;
+	const token = getControlledToken()
+	if (!token)
+		return;
+	ruler.clear();
+	ruler.isRangefinder = true;
+	ruler.rangefinderToken = token;
+	const tokenCenter = {x: token.x + token.w / 2, y: token.y + token.h / 2};
+	ruler._addWaypoint(tokenCenter);
+	measure(event);
+	game.user.broadcastActivity({ruler});
+	return true;
+}
+
+function deactivate() {
+	const ruler = canvas.controls.ruler;
+	if (ruler.isRangefinder) {
+		ruler.isRangefinder = false
+		if (ruler._state !== Ruler.STATES.MOVING)
+			ruler._endMeasurement()
 	}
-	return wrapped(event, key, up);
+	return true;
 }
 
 function onClickRight(wrapped, event) {
