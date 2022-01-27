@@ -1,3 +1,8 @@
+## 1.1.1
+### Bugfixes
+- The Rangefinder hotkey will no longer block key combinations that include the configured rangefinder key
+
+
 ## 1.1.0
 ### Keybindings
 **BREAKING**
