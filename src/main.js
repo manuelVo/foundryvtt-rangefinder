@@ -43,10 +43,10 @@ function activate(event) {
 	// If the current ruler is a rangefinder don't refresh it
 	// This can happen because the browser may fire another event that doesn't have event.repeat set after a click on the canvas
 	if (ruler.isRangefinder)
-		return;
+		return false;
 	const token = getControlledToken()
 	if (!token)
-		return;
+		return false;
 	ruler.clear();
 	ruler.isRangefinder = true;
 	ruler.rangefinderToken = token;
@@ -54,7 +54,7 @@ function activate(event) {
 	ruler._addWaypoint(tokenCenter);
 	measure(event);
 	game.user.broadcastActivity({ruler});
-	return true;
+	return false;
 }
 
 function deactivate() {
@@ -64,7 +64,7 @@ function deactivate() {
 		if (ruler._state !== Ruler.STATES.MOVING)
 			ruler._endMeasurement()
 	}
-	return true;
+	return false;
 }
 
 function onClickRight(wrapped, event) {
