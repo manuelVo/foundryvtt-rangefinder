@@ -97,9 +97,7 @@ function onMouseMove(event) {
 
 function measure(event) {
 	const ruler = canvas.controls.ruler;
-	const canvasMousePos = canvas.app.renderer.plugins.interaction.mouse.getLocalPosition(
-		canvas.tokens,
-	);
+	const canvasMousePos = canvas.app.renderer.events.pointer.getLocalPosition(canvas.tokens);
 
 	const mt = ruler.rangefinderMeasureTime ?? 0;
 

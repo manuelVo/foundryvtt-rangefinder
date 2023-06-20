@@ -3,8 +3,8 @@
 	"title": "Rangefinder",
 	"description": "Quckly find out how far something is away form you. Pressing Alt Gr (this key can be changed) will show a ruler between your token and the area you're hovering.",
 	"version": "1.1.1",
-	"minimumCoreVersion" : "9.238",
-	"compatibleCoreVersion" : "9",
+	"minimumCoreVersion" : "11",
+	"compatibleCoreVersion" : "11",
 	"authors": [
 		{
 			"name": "Manuel Vögele",
