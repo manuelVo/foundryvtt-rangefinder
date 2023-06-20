@@ -1,3 +1,7 @@
+## 1.1.2
+### Compatibility
+- Rangefinder has been updated to work with Foundry 11
+
 ## 1.1.1
 ### Bugfixes
 - The Rangefinder hotkey will no longer block key combinations that include the configured rangefinder key
